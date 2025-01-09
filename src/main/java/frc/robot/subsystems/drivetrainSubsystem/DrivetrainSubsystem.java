@@ -9,10 +9,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import java.util.function.DoubleSupplier;
 
 // Class to drive the robot over CAN
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -68,11 +69,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-  }
+  public void periodic() {}
 
   // sets the speed of the drive motors
-  public void driveArcade(double xSpeed, double zRotation) {
-    drive.arcadeDrive(xSpeed, zRotation);
+  public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+    return runOnce(() -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
   }
 }
