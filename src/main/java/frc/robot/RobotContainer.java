@@ -58,7 +58,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Set the A button to run the "runRoller" command from the factory with a fixed
     // value ejecting the gamepiece while the button is held
-    operatorController
+    driverController
         .a()
         .whileTrue(
             rollerSubsystem.runRoller(
@@ -70,13 +70,12 @@ public class RobotContainer {
     // stick away from you (a negative value) drives the robot forwards (a positive
     // value)
     driveSubsystem.setDefaultCommand(
-        driveSubsystem.driveArcade(
-            driveSubsystem,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getRightX()));
+        driveSubsystem.driveCommand(
+            () -> -driverController.getLeftY(), () -> -driverController.getRightX()));
 
     // Set the default command for the roller subsystem to the command from the
     // factory with the values provided by the triggers on the operator controller
+    //         aaa b q
     rollerSubsystem.setDefaultCommand(
         rollerSubsystem.runRoller(
             rollerSubsystem,
