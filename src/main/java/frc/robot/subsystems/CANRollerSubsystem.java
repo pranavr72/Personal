@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RollerConstants;
-import java.util.function.DoubleSupplier;
 
 /** Class to run the rollers over CAN */
 public class CANRollerSubsystem extends SubsystemBase {
@@ -26,7 +25,7 @@ public class CANRollerSubsystem extends SubsystemBase {
     // Set can timeout. Because this project only sets parameters once on
     // construction, the timeout can be long without blocking robot operation. Code
     // which sets or gets parameters during operation may need a shorter timeout.
-    rollerMotor.setCANTimeout(250);
+    rollerMotor.setCANTimeout(75);
 
     // Create and apply configuration for roller motor. Voltage compensation helps
     // the roller behave the same as the battery
@@ -43,9 +42,13 @@ public class CANRollerSubsystem extends SubsystemBase {
   public void periodic() {}
 
   // Command to run the roller with joystick inputs
-  public Command runRoller(
-      CANRollerSubsystem rollerSubsystem, DoubleSupplier forward, DoubleSupplier reverse) {
+  public Command humanrollerCommand(double percent) {
     return Commands.run(
-        () -> rollerMotor.set(forward.getAsDouble() - reverse.getAsDouble()), rollerSubsystem);
+        () -> rollerMotor.set(percent));
+  }
+
+  public Command ejectCommand() {
+    return Commands.run(
+        () -> rollerMotor.set(RollerConstants.ROLLER_EJECT_PERCENT));
   }
 }

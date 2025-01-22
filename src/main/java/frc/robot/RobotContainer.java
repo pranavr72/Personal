@@ -61,8 +61,7 @@ public class RobotContainer {
     driverController
         .a()
         .whileTrue(
-            rollerSubsystem.runRoller(
-                rollerSubsystem, () -> RollerConstants.ROLLER_EJECT_VALUE, () -> 0));
+            rollerSubsystem.ejectCommand());
 
     // Set the default command for the drive subsystem to the command provided by
     // factory with the values provided by the joystick axes on the driver
@@ -70,17 +69,15 @@ public class RobotContainer {
     // stick away from you (a negative value) drives the robot forwards (a positive
     // value)
     driveSubsystem.setDefaultCommand(
-        driveSubsystem.driveCommand(
+        driveSubsystem.arcadeDrive(
             () -> -driverController.getLeftY(), () -> -driverController.getRightX()));
 
     // Set the default command for the roller subsystem to the command from the
     // factory with the values provided by the triggers on the operator controller
-    //         aaa b q
+    
     rollerSubsystem.setDefaultCommand(
-        rollerSubsystem.runRoller(
-            rollerSubsystem,
-            () -> operatorController.getRightTriggerAxis(),
-            () -> operatorController.getLeftTriggerAxis()));
+        rollerSubsystem.humanrollerCommand(
+            operatorController.getRightTriggerAxis() - operatorController.getLeftTriggerAxis()));
   }
 
   /**
@@ -89,7 +86,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return autoChooser.getSelected();
   }
 }
