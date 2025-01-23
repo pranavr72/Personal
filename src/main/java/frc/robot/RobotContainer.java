@@ -71,9 +71,7 @@ public class RobotContainer {
     // Set the default command for the roller subsystem to the command from the
     // factory with the values provided by the triggers on the operator controller
 
-    rollerSubsystem.setDefaultCommand(
-        rollerSubsystem.humanrollerCommand(
-            operatorController.getRightTriggerAxis() - operatorController.getLeftTriggerAxis()));
+    rollerSubsystem.setDefaultCommand(rollerSubsystem.ejectCommand());
   }
 
   /**

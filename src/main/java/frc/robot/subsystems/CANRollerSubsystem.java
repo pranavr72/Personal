@@ -46,7 +46,12 @@ public class CANRollerSubsystem extends SubsystemBase {
     return Commands.run(() -> rollerMotor.set(percent));
   }
 
+  // Scoring method
   public Command ejectCommand() {
     return Commands.run(() -> rollerMotor.set(RollerConstants.ROLLER_EJECT_PERCENT));
+  }
+
+  public Command unstickGamePiece() {
+    return Commands.run(() -> rollerMotor.set(-(RollerConstants.ROLLER_EJECT_PERCENT)));
   }
 }

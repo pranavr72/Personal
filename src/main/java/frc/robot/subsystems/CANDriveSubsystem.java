@@ -44,24 +44,9 @@ public class CANDriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {}
 
-  // public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
-  //   return run(
-  //       () -> {
-  //         double left = 0;
-  //         double right = 0;
-  //         left = forward.getAsDouble();
-  //         right = forward.getAsDouble();
-  //         left -= rotation.getAsDouble();
-  //         right += rotation.getAsDouble();
-  //         left /= 2;
-  //         right /= 2;
-  //         leftLeader.set(ControlMode.PercentOutput, left);
-  //         rightLeader.set(ControlMode.PercentOutput, right);
-  //         SmartDashboard.putNumber("Left Drive Speed", left);
-  //         SmartDashboard.putNumber("Right Drive Speed", right);
-  //       });
-  // }
-
+  /**
+   * @param forward how much to drive intake forward
+   */
   public Command arcadeDrive(DoubleSupplier forward, DoubleSupplier rotation) {
     return run(() -> diffDrive.arcadeDrive(forward.getAsDouble(), rotation.getAsDouble()));
   }
