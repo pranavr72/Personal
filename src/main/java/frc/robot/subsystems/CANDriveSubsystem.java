@@ -7,11 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import java.util.function.DoubleSupplier;
@@ -21,8 +18,6 @@ public class CANDriveSubsystem extends SubsystemBase {
   private final VictorSPX leftFollower;
   private final VictorSPX rightLeader;
   private final VictorSPX rightFollower;
-
-  
 
   private final DifferentialDrive diffDrive;
 
@@ -37,21 +32,18 @@ public class CANDriveSubsystem extends SubsystemBase {
     rightFollower.setInverted(InvertType.FollowMaster);
 
     leftLeader.setInverted(true);
-    leftFollower.setInverted(InvertType.FollowMaster); 
-
+    leftFollower.setInverted(InvertType.FollowMaster);
 
     // Create new Differntial Drive
-    diffDrive = new DifferentialDrive((speed) -> leftLeader.set(ControlMode.PercentOutput, speed),
-                                      (speed) -> rightLeader.set(ControlMode.PercentOutput, speed));
-    
+    diffDrive =
+        new DifferentialDrive(
+            (speed) -> leftLeader.set(ControlMode.PercentOutput, speed),
+            (speed) -> rightLeader.set(ControlMode.PercentOutput, speed));
   }
-
-  
 
   @Override
   public void periodic() {}
 
-  
   // public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
   //   return run(
   //       () -> {
@@ -70,15 +62,7 @@ public class CANDriveSubsystem extends SubsystemBase {
   //       });
   // }
 
-
-  public Command arcadeDrive(DoubleSupplier forward, DoubleSupplier rotation){
+  public Command arcadeDrive(DoubleSupplier forward, DoubleSupplier rotation) {
     return run(() -> diffDrive.arcadeDrive(forward.getAsDouble(), rotation.getAsDouble()));
   }
-
-  
-
-
-
-  
-
 }

@@ -43,12 +43,10 @@ public class CANRollerSubsystem extends SubsystemBase {
 
   // Command to run the roller with joystick inputs
   public Command humanrollerCommand(double percent) {
-    return Commands.run(
-        () -> rollerMotor.set(percent));
+    return Commands.run(() -> rollerMotor.set(percent));
   }
 
   public Command ejectCommand() {
-    return Commands.run(
-        () -> rollerMotor.set(RollerConstants.ROLLER_EJECT_PERCENT));
+    return Commands.run(() -> rollerMotor.set(RollerConstants.ROLLER_EJECT_PERCENT));
   }
 }

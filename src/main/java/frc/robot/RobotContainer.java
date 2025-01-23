@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.RollerConstants;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANRollerSubsystem;
@@ -58,10 +57,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Set the A button to run the "runRoller" command from the factory with a fixed
     // value ejecting the gamepiece while the button is held
-    driverController
-        .a()
-        .whileTrue(
-            rollerSubsystem.ejectCommand());
+    driverController.a().whileTrue(rollerSubsystem.ejectCommand());
 
     // Set the default command for the drive subsystem to the command provided by
     // factory with the values provided by the joystick axes on the driver
@@ -74,7 +70,7 @@ public class RobotContainer {
 
     // Set the default command for the roller subsystem to the command from the
     // factory with the values provided by the triggers on the operator controller
-    
+
     rollerSubsystem.setDefaultCommand(
         rollerSubsystem.humanrollerCommand(
             operatorController.getRightTriggerAxis() - operatorController.getLeftTriggerAxis()));
