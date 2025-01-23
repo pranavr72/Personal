@@ -20,6 +20,17 @@ public final class Constants {
     public static final int RIGHT_FOLLOWER_ID = 2;
 
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 40;
+
+    public static final int RIGHT_DRIVE_ENCODER_A = 1;
+    public static final int RIGHT_DRIVE_ENCODER_B = 2;
+
+    public static final int LEFT_DRIVE_ENCODER_A = 5;
+    public static final int LEFT_DRIVE_ENCODER_B = 6;
+
+    
+    
+
+
   }
 
   public static final class RollerConstants {
