@@ -27,10 +27,11 @@ public final class Constants {
     public static final int LEFT_DRIVE_ENCODER_A = 5;
     public static final int LEFT_DRIVE_ENCODER_B = 6;
 
-    
-    
-
-
+    // INCORRECT NUMBER NEED TO BE FILLED IN
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    public static final int PIGEON_DEVICE_ID = 3;
+    public static final int TRACK_WIDTH = 15;
+    // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
   }
 
   public static final class RollerConstants {
