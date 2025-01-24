@@ -19,8 +19,6 @@ public final class Constants {
     public static final int RIGHT_LEADER_ID = 1;
     public static final int RIGHT_FOLLOWER_ID = 2;
 
-    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 40;
-
     public static final int RIGHT_DRIVE_ENCODER_A = 1;
     public static final int RIGHT_DRIVE_ENCODER_B = 2;
 
@@ -38,6 +36,7 @@ public final class Constants {
     public static final int ROLLER_MOTOR_CURRENT_LIMIT = 60;
     public static final double ROLLER_MOTOR_VOLTAGE_COMP = 12;
     public static final double ROLLER_EJECT_PERCENT = 0.44;
+    public static final double ROLLER_INTAKE_PERCENT=-0.44;
   }
 
   public static final class OperatorConstants {
