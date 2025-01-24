@@ -55,22 +55,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Set the A button to run the "runRoller" command from the factory with a fixed
-    // value ejecting the gamepiece while the button is held
+    // Set input A from driver controller to run ejectCommand
     driverController.a().onTrue(rollerSubsystem.ejectCommand());
 
-    // Set the default command for the drive subsystem to the command provided by
-    // factory with the values provided by the joystick axes on the driver
-    // controller. The Y axis of the controller is inverted so that pushing the
-    // stick away from you (a negative value) drives the robot forwards (a positive
-    // value)
+    // Set input B from driver controller to run intakeCommand
+    driverController.b().onTrue(rollerSubsystem.intakeCommand());
+
+    /// Set driveSUbystem's default Command to be arcadeDrive
     driveSubsystem.setDefaultCommand(
         driveSubsystem.arcadeDrive(
             () -> -driverController.getLeftY(), () -> -driverController.getRightX()));
-
-    // Set the default command for the roller subsystem to the command from the
-    // factory with the values provided by the triggers on the operator controller
-
   }
 
   /**

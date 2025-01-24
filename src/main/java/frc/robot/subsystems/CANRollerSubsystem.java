@@ -41,7 +41,7 @@ public class CANRollerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {}
 
-  //Run Roller at given speed
+  // Run Roller at given speed
   public Command runRollerCommand(double percent) {
     return Commands.run(() -> rollerMotor.set(percent));
   }
@@ -54,5 +54,4 @@ public class CANRollerSubsystem extends SubsystemBase {
   public Command intakeCommand() {
     return runRollerCommand(RollerConstants.ROLLER_INTAKE_PERCENT);
   }
-
 }
