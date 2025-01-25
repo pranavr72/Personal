@@ -13,9 +13,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -40,6 +43,9 @@ public class CANDriveSubsystem extends SubsystemBase {
   private Pose2d position;
 
   private DifferentialDriveWheelSpeeds wheelSpeeds;
+
+  private final NetworkTable table;
+  private final NetworkTableInstance inst;
 
   public CANDriveSubsystem() {
     // create brushed motors for drive
@@ -72,6 +78,9 @@ public class CANDriveSubsystem extends SubsystemBase {
     driveOdometry =
         new DifferentialDriveOdometry(
             gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance());
+
+    inst = NetworkTableInstance.getDefault();
+    table = inst.getTable("Drivetrain");
   }
 
   // Pigeon Functions for Odometry
@@ -94,6 +103,10 @@ public class CANDriveSubsystem extends SubsystemBase {
     diffDrive.arcadeDrive(relativeSpeeds.vyMetersPerSecond, relativeSpeeds.omegaRadiansPerSecond);
   }
 
+  // ShuffleBoard Tab Setup
+
+  private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+
   @Override
   public void periodic() {
     position =
@@ -102,31 +115,9 @@ public class CANDriveSubsystem extends SubsystemBase {
 
     wheelSpeeds = new DifferentialDriveWheelSpeeds(leftEncoder.getRate(), rightEncoder.getRate());
 
-    // ShuffleBoard Logging
-    Shuffleboard.getTab("Drive")
-        .add("Left Encoder Distance", leftEncoder.getDistance())
-        .withPosition(0, 0)
-        .withSize(2, 1);
-
-    Shuffleboard.getTab("Drive")
-        .add("Right Encoder Distance", rightEncoder.getDistance())
-        .withPosition(0, 1)
-        .withSize(2, 1);
-
-    Shuffleboard.getTab("Drive")
-        .add("Left Encoder Rate", leftEncoder.getRate())
-        .withPosition(2, 0)
-        .withSize(2, 1);
-
-    Shuffleboard.getTab("Drive")
-        .add("Right Encoder Rate", rightEncoder.getRate())
-        .withPosition(2, 1)
-        .withSize(2, 1);
-
-    Shuffleboard.getTab("Drive")
-        .add("Robot Position", position.toString())
-        .withPosition(4, 0)
-        .withSize(4, 2);
+    table.getEntry("Left Encoder Speed").setDouble(leftEncoder.getRate());
+    table.getEntry("Right Encoder Speed").setDouble(rightEncoder.getRate());
+    table.getEntry("Bot Position").setString(position.toString());
   }
 
   /**
