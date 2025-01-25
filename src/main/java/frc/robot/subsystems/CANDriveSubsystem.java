@@ -7,7 +7,15 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix6.hardware.Pigeon2;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -19,7 +27,19 @@ public class CANDriveSubsystem extends SubsystemBase {
   private final VictorSPX rightLeader;
   private final VictorSPX rightFollower;
 
+  private final Encoder leftEncoder;
+  private final Encoder rightEncoder;
+
+  private final Pigeon2 gyro;
+
   private final DifferentialDrive diffDrive;
+  private final DifferentialDriveOdometry driveOdometry;
+
+  private DifferentialDriveKinematics kinematics;
+
+  private Pose2d position;
+
+  private DifferentialDriveWheelSpeeds wheelSpeeds;
 
   public CANDriveSubsystem() {
     // create brushed motors for drive
@@ -28,21 +48,86 @@ public class CANDriveSubsystem extends SubsystemBase {
     rightLeader = new VictorSPX(DriveConstants.RIGHT_LEADER_ID);
     rightFollower = new VictorSPX(DriveConstants.RIGHT_FOLLOWER_ID);
 
+    leftEncoder =
+        new Encoder(DriveConstants.LEFT_DRIVE_ENCODER_A, DriveConstants.LEFT_DRIVE_ENCODER_B);
+    rightEncoder =
+        new Encoder(DriveConstants.RIGHT_DRIVE_ENCODER_A, DriveConstants.RIGHT_DRIVE_ENCODER_B);
+
     rightLeader.setInverted(false);
     rightFollower.setInverted(InvertType.FollowMaster);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(InvertType.FollowMaster);
 
-    // Create new Differntial Drive
+    gyro = new Pigeon2(DriveConstants.PIGEON_DEVICE_ID);
+
+    kinematics = new DifferentialDriveKinematics(DriveConstants.TRACK_WIDTH);
+
     diffDrive =
         new DifferentialDrive(
             (speed) -> leftLeader.set(ControlMode.PercentOutput, speed),
             (speed) -> rightLeader.set(ControlMode.PercentOutput, speed));
+
+    // Create new odometry obkect
+    driveOdometry =
+        new DifferentialDriveOdometry(
+            gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance());
+  }
+
+  // Pigeon Functions for Odometry
+  public void resetOdometry(Pose2d resetpose) {
+    driveOdometry.resetPosition(
+        gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance(), resetpose);
+  }
+
+  public Pose2d getPosition() {
+    return position;
+  }
+
+  // Get Current Speed
+  public ChassisSpeeds getCurrentSpeeds() {
+    return kinematics.toChassisSpeeds(wheelSpeeds);
+  }
+
+  //
+  public void driveRobotRelative(ChassisSpeeds relativeSpeeds) {
+    diffDrive.arcadeDrive(relativeSpeeds.vyMetersPerSecond, relativeSpeeds.omegaRadiansPerSecond);
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    position =
+        driveOdometry.update(
+            gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance());
+
+    wheelSpeeds = new DifferentialDriveWheelSpeeds(leftEncoder.getRate(), rightEncoder.getRate());
+
+    // ShuffleBoard Logging
+    Shuffleboard.getTab("Drive")
+        .add("Left Encoder Distance", leftEncoder.getDistance())
+        .withPosition(0, 0)
+        .withSize(2, 1);
+
+    Shuffleboard.getTab("Drive")
+        .add("Right Encoder Distance", rightEncoder.getDistance())
+        .withPosition(0, 1)
+        .withSize(2, 1);
+
+    Shuffleboard.getTab("Drive")
+        .add("Left Encoder Rate", leftEncoder.getRate())
+        .withPosition(2, 0)
+        .withSize(2, 1);
+
+    Shuffleboard.getTab("Drive")
+        .add("Right Encoder Rate", rightEncoder.getRate())
+        .withPosition(2, 1)
+        .withSize(2, 1);
+
+    Shuffleboard.getTab("Drive")
+        .add("Robot Position", position.toString())
+        .withPosition(4, 0)
+        .withSize(4, 2);
+  }
 
   /**
    * @param forward how much to drive intake forward
