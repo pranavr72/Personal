@@ -41,17 +41,21 @@ public class CANRollerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {}
 
-  // Command to run the roller with joystick inputs
-  public Command humanrollerCommand(double percent) {
+  // Run Roller at given speed
+  public Command runRollerCommand(double percent) {
     return Commands.run(() -> rollerMotor.set(percent));
   }
 
   // Scoring method
   public Command ejectCommand() {
-    return Commands.run(() -> rollerMotor.set(RollerConstants.ROLLER_EJECT_PERCENT));
+    return runRollerCommand(RollerConstants.ROLLER_EJECT_PERCENT);
   }
 
-  public Command unstickGamePiece() {
-    return Commands.run(() -> rollerMotor.set(-(RollerConstants.ROLLER_EJECT_PERCENT)));
+  public Command intakeCommand() {
+    return runRollerCommand(RollerConstants.ROLLER_INTAKE_PERCENT);
+  }
+
+  public Command stopRoller() {
+    return runRollerCommand(0.0);
   }
 }
