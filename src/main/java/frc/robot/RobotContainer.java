@@ -56,10 +56,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Set input A from driver controller to run ejectCommand
-    driverController.a().whileTrue(rollerSubsystem.ejectCommand());
+    rollerSubsystem.ejectCommand(true);
 
     // Set input B from driver controller to run intakeCommand
-    driverController.b().whileTrue(rollerSubsystem.intakeCommand());
+    driverController.b().onTrue(rollerSubsystem.stopRoller());
 
     /// Set driveSUbystem's default Command to be arcadeDrive
     driveSubsystem.setDefaultCommand(
